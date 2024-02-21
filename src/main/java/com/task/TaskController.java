@@ -39,12 +39,14 @@ public class TaskController {
 
   @GetMapping("/")
   public Collection<Task> findTasks() {
-    return repository.getTasks();
+    return repository.findAll();
+    // return repository.getTasks();
   }
 
   @GetMapping("/filter")
   public Page<Task> filterTasks(@ParameterObject Pageable pageable) {
-    return repository.getTasks(pageable);
+    return repository.findAll(pageable);
+    // return repository.getTasks(pageable);
   }
 
   @PutMapping("/{id}")
