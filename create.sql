@@ -1,0 +1,2 @@
+create sequence tasks_seq start with 1 increment by 50;
+create table tasks (due_date date not null, id bigint not null, title varchar(20) not null, description varchar(150) not null, primary key (id));
