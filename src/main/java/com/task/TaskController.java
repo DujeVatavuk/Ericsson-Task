@@ -43,6 +43,7 @@ public class TaskController {
     // return repository.getTasks();
   }
 
+  @SuppressWarnings("null")
   @GetMapping("/filter")
   public Page<Task> filterTasks(@ParameterObject Pageable pageable) {
     return repository.findAll(pageable);

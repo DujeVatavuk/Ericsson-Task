@@ -1,16 +1,16 @@
 package com.task;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+// import java.util.Collection;
+// import java.util.HashMap;
+// import java.util.List;
+// import java.util.Map;
+// import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+// import org.springframework.data.domain.Page;
+// import org.springframework.data.domain.PageImpl;
+// import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+// import org.springframework.stereotype.Repository;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 }
