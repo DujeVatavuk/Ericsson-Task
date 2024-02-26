@@ -12,6 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+
+import org.springdoc.core.annotations.ParameterObject;
+import org.springdoc.core.converters.models.Pageable;
+import org.springframework.data.domain.Page;
 // import org.springdoc.core.annotations.ParameterObject;
 // import org.springframework.data.domain.Page;
 // import org.springframework.data.domain.Pageable;
@@ -42,22 +46,28 @@ public class TaskController {
   @GetMapping("/")
   public Collection<Task> findTasks() {
     return repository.findAll();
-    // return repository.getTasks();
   }
 
   // @SuppressWarnings("null")
   // @GetMapping("/filter")
   // public Page<Task> filterTasks(@ParameterObject Pageable pageable) {
   //   return repository.findAll(pageable);
-  //   // return repository.getTasks(pageable);
   // }
 
   @SuppressWarnings("null")
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public Task updateTask(@PathVariable("id") final long id, @RequestBody final Task task) {
+    task.setId(id);
+    return repository.save(task);
+  }
+  
+  @SuppressWarnings("null")
+  @PatchMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public Task patchTask(@PathVariable("id") final long id, @RequestBody final Task task) {
     Task taskDB = repository.findById(id).orElseThrow(TaskNotFoundException::new);
-    
+
     if (Objects.nonNull(task.getTitle()) && !"".equalsIgnoreCase(task.getTitle())) {
       taskDB.setTitle(task.getTitle());
     }
@@ -67,13 +77,7 @@ public class TaskController {
     if (Objects.nonNull(task.getDueDate())) {
       taskDB.setDueDate(task.getDueDate());
     }
-    return repository.save(taskDB); 
-  }
-
-  @PatchMapping("/{id}")
-  @ResponseStatus(HttpStatus.OK)
-  public Task patchTask(@PathVariable("id") final String id, @RequestBody final Task task) {
-    return task;
+    return repository.save(taskDB);
   }
 
   @SuppressWarnings("null")
@@ -81,19 +85,11 @@ public class TaskController {
   @ResponseStatus(HttpStatus.CREATED)
   public Task postTask(@NotNull @Valid @RequestBody final Task task) {
     return repository.save(task);
-    // return task;
   }
-
-  // @RequestMapping(method = RequestMethod.HEAD, value = "/")
-  // @ResponseStatus(HttpStatus.OK)
-  // public Task headTask() {
-  //   return new Task();
-  // }
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public void deleteTask(@PathVariable final long id) {
     repository.deleteById(id);
-    // return id;
   }
 }

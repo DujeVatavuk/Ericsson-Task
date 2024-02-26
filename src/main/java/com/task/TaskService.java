@@ -43,6 +43,9 @@ public class TaskService {
     if (task.getDescription() != null) {
       existingTask.setDescription(task.getDescription());
     }
+    if (task.getDueDate() != null) {
+      existingTask.setDueDate(task.getDueDate());
+    }
     return taskRepository.save(existingTask);
   }
 }
