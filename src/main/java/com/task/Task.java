@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 
 // import org.springframework.data.annotation.Id;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -20,17 +19,14 @@ public class Task {
   @GeneratedValue
   private long id;
 
-  @NotBlank
   @Size(min = 0, max = 20)
   @Column(nullable = false, length = 20)
   private String title;
 
-  @NotBlank
   @Size(min = 0, max = 150)
   @Column(nullable = false, length = 20)
   private String description;
 
-  @NotBlank
   @Column(nullable = false)
   private Date dueDate;
 

@@ -1,6 +1,8 @@
 package com.task;
 
 import java.util.Collection;
+import java.util.Objects;
+// import java.util.Optional;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,9 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+// import org.springdoc.core.annotations.ParameterObject;
+// import org.springframework.data.domain.Page;
+// import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,17 +45,29 @@ public class TaskController {
     // return repository.getTasks();
   }
 
-  @SuppressWarnings("null")
-  @GetMapping("/filter")
-  public Page<Task> filterTasks(@ParameterObject Pageable pageable) {
-    return repository.findAll(pageable);
-    // return repository.getTasks(pageable);
-  }
+  // @SuppressWarnings("null")
+  // @GetMapping("/filter")
+  // public Page<Task> filterTasks(@ParameterObject Pageable pageable) {
+  //   return repository.findAll(pageable);
+  //   // return repository.getTasks(pageable);
+  // }
 
+  @SuppressWarnings("null")
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public Task updateTask(@PathVariable("id") final String id, @RequestBody final Task task) {
-    return task;
+  public Task updateTask(@PathVariable("id") final long id, @RequestBody final Task task) {
+    Task taskDB = repository.findById(id).orElseThrow(TaskNotFoundException::new);
+    
+    if (Objects.nonNull(task.getTitle()) && !"".equalsIgnoreCase(task.getTitle())) {
+      taskDB.setTitle(task.getTitle());
+    }
+    if (Objects.nonNull(task.getDescription()) && !"".equalsIgnoreCase(task.getDescription())) {
+      taskDB.setDescription(task.getDescription());
+    }
+    if (Objects.nonNull(task.getDueDate())) {
+      taskDB.setDueDate(task.getDueDate());
+    }
+    return repository.save(taskDB); 
   }
 
   @PatchMapping("/{id}")
@@ -62,21 +76,24 @@ public class TaskController {
     return task;
   }
 
+  @SuppressWarnings("null")
   @PostMapping("/")
   @ResponseStatus(HttpStatus.CREATED)
   public Task postTask(@NotNull @Valid @RequestBody final Task task) {
-    return task;
+    return repository.save(task);
+    // return task;
   }
 
-  @RequestMapping(method = RequestMethod.HEAD, value = "/")
-  @ResponseStatus(HttpStatus.OK)
-  public Task headTask() {
-    return new Task();
-  }
+  // @RequestMapping(method = RequestMethod.HEAD, value = "/")
+  // @ResponseStatus(HttpStatus.OK)
+  // public Task headTask() {
+  //   return new Task();
+  // }
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public long deleteTask(@PathVariable final long id) {
-    return id;
+  public void deleteTask(@PathVariable final long id) {
+    repository.deleteById(id);
+    // return id;
   }
 }
